@@ -8,6 +8,12 @@
     "test": "mocha",
     "test:watch": "mocha --watch"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "pre-push": "npm test"
+    }
+  },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -17,6 +23,7 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
+    "husky": "^3.0.9",
     "mocha": "^6.2.2",
     "should": "^13.2.3"
   }
