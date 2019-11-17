@@ -1,4 +1,10 @@
-const { addTodo, getTodo, getTodos, removeTodo } = require("../src/use-cases");
+const {
+  addTodo,
+  getTodo,
+  getTodos,
+  removeTodo,
+  updateOne
+} = require("../src/use-cases");
 const assert = require("assert");
 const should = require("should");
 
@@ -139,6 +145,26 @@ describe("Todo uses cases or services", () => {
       );
 
       deleted1.text.should.equal(created1.text);
+    });
+  });
+
+  describe("Update Todo", () => {
+    const todo = { text: "create" };
+    let created = null;
+    let updated = null;
+
+    before(async () => {
+      created = await addTodo(todo);
+      updated = await updateOne({
+        id: created.id,
+        todoInfo: { text: "update" }
+      });
+    });
+
+    it("successfully Updates Todo", () => {
+      should.exists(updated);
+
+      updated.text.should.equal("update");
     });
   });
 });

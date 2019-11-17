@@ -26,7 +26,7 @@ const makeTodoDb = () => {
 
   findById = id => {
     const found = todoList.find(todo => todo.id === id) || null;
-    console.log("found ", found);
+
     return found;
   };
 
@@ -40,7 +40,29 @@ const makeTodoDb = () => {
     return found;
   };
 
-  return { insert, findAll, findByText, findById, findByIdAndDelete };
+  findByIdAndUpdate = (id, update) => {
+    if (!id) throw new Error("Id must be supplied");
+
+    const found = findById(id);
+    if (!found) throw new Error("Todo doesnt exists");
+
+    todoList = todoList.map(todo => {
+      if (todo.id == found.id) return { ...todo, ...update };
+      return todo;
+    });
+
+    const updated = findById(id);
+    return updated;
+  };
+
+  return {
+    insert,
+    findAll,
+    findByText,
+    findById,
+    findByIdAndDelete,
+    findByIdAndUpdate
+  };
 };
 
 module.exports = makeTodoDb;

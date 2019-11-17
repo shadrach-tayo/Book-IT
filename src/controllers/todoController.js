@@ -1,4 +1,10 @@
-const TodoController = ({ addTodo, getTodos, getTodo, removeTodo }) => {
+const TodoController = ({
+  addTodo,
+  getTodos,
+  getTodo,
+  removeTodo,
+  updateOne
+}) => {
   /**
    * Funtion to handle creating a new Todo
    * @param {object} httpRequest
@@ -13,6 +19,33 @@ const TodoController = ({ addTodo, getTodos, getTodo, removeTodo }) => {
         body: {
           status: "success",
           message: "Todo successfully created",
+          todo
+        }
+      };
+    } catch (error) {
+      return {
+        headers: { ...httpRequest.headers },
+        statusCode: 400,
+        body: {
+          status: "error",
+          message: error.message
+        }
+      };
+    }
+  }
+
+  async function updateTodo(httpRequest) {
+    try {
+      const { todo: todoInfo } = httpRequest.body;
+      const { id } = httpRequest.params;
+
+      const todo = await updateOne({ id, todoInfo });
+
+      return {
+        headers: { ...httpRequest.headers },
+        body: {
+          status: "success",
+          message: "Todo successfully updated",
           todo
         }
       };
@@ -97,7 +130,7 @@ const TodoController = ({ addTodo, getTodos, getTodo, removeTodo }) => {
     }
   }
 
-  return { postTodo, getAll, getOne, deleteTodo };
+  return { postTodo, getAll, getOne, deleteTodo, updateTodo };
 };
 
 module.exports = TodoController;
