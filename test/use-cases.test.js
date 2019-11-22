@@ -1,170 +1,198 @@
-const {
-  addTodo,
-  getTodo,
-  getTodos,
-  removeTodo,
-  updateOne
-} = require("../src/use-cases");
-const assert = require("assert");
-const should = require("should");
+const request = require("supertest");
+const app = require("../src/app");
+const db = require("../src/setupdb");
 
 describe("Todo uses cases or services", () => {
+  afterAll(async () => {
+    await db.collection("todos").deleteMany();
+  });
+
   describe("Add Todo", () => {
-    const todo = { text: "Todoist" };
-    let created = null;
+    const todo = {
+      text: "Todoist"
+    };
 
-    before(async () => {
-      created = await addTodo(todo);
-    });
+    it("successfully Adds Todo", async () => {
+      const res = await request(app)
+        .post("/todo/create")
+        .send({ todo });
 
-    it("successfully Adds Todo", () => {
-      should.exists(created);
-      created.text.should.be.defined;
-      created.id.should.be.defined;
-      assert.ok(
-        created.text === "Todoist",
-        "created todo text not equal 'Todoist'"
-      );
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.todo.text).toEqual(todo.text);
+      expect(res.body.todo._id).toBeDefined();
     });
   });
 
   describe("Todo Already Exits", () => {
-    const todo = { text: "Todoist" };
-    let created = null;
-    let error = null;
+    const todo = {
+      text: "Todoist"
+    };
+    let res = null;
 
-    before(async () => {
-      try {
-        created = await addTodo(todo);
-        created = await addTodo(todo);
-      } catch (err) {
-        error = err;
-      }
+    beforeAll(async () => {
+      res = await request(app)
+        .post("/todo/create")
+        .send({ todo });
     });
 
-    it("returns an error object", () => {
-      should.exists(error);
-      assert.ok(typeof error === "object", "error is not an object");
+    it("returns an error status", () => {
+      expect(res.body.status).toEqual("error");
     });
 
     it("doesn't create todo", () => {
-      assert.ok(created === null, "Created todo should be null");
+      expect(res.body.todo).toBeUndefined();
     });
 
     it("returns an error message 'Todo already exists!!!'", () => {
-      assert.ok(
-        error.message === "Todo already exists!!!",
-        "Error message not equal 'Todo already exists!!!'"
-      );
+      expect(res.body.message).toBe("Todo already exists!!!");
     });
   });
 
   describe("Get Todos", () => {
-    const todo1 = { text: "Todoist1" };
-    const todo2 = { text: "Todoist2" };
+    const todo1 = {
+      todo: {
+        text: "Todoist1"
+      }
+    };
+    const todo2 = {
+      todo: {
+        text: "Todoist2"
+      }
+    };
     let created1 = null;
     let created2 = null;
     todos = [];
 
-    before(async () => {
-      created1 = await addTodo(todo1);
-      created2 = await addTodo(todo2);
-      todos = await getTodos();
+    beforeAll(async () => {
+      await db.collection("todos").deleteMany();
+
+      created1 = await request(app)
+        .post("/todo/create")
+        .send(todo1);
+
+      created2 = await request(app)
+        .post("/todo/create")
+        .send(todo2);
+
+      todos = await request(app).get("/todos");
     });
 
     it("successfully Gets Todos", () => {
-      should.exists(created1);
-      should.exists(created2);
+      expect(created1.body).toBeDefined();
+      expect(created2.body).toBeDefined();
 
-      created1.text.should.be.defined;
-      created2.text.should.be.defined;
+      expect(created1.body.todo.text).toBeDefined();
+      expect(created2.body.todo.text).toBeDefined();
 
-      created1.id.should.be.defined;
-      created2.id.should.be.defined;
-
-      assert.ok(
-        created1.text === "Todoist1",
-        "created todo text not equal 'Todoist'"
-      );
-      assert.ok(
-        created2.text === "Todoist2",
-        "created todo text not equal 'Todoist'"
-      );
+      expect(created1.body.todo.text).toEqual("Todoist1");
+      expect(created2.body.todo.text).toEqual("Todoist2");
     });
 
     it("Returns 2 todos", () => {
-      todos.length.should.equal(3);
+      expect(todos.body.todos.length).toEqual(2);
     });
   });
 
   describe("Get Todo", () => {
-    const todo1 = { text: "Todoist3" };
+    const todo1 = {
+      todo: {
+        text: "Todoist3"
+      }
+    };
 
-    let creted = null;
+    let created = null;
     let result = null;
 
-    before(async () => {
-      created = await addTodo(todo1);
-      result = await getTodo(created.id);
+    beforeAll(async () => {
+      created = await request(app)
+        .post("/todo/create")
+        .send(todo1);
+
+      result = await request(app).get(`/todo/${created.body.todo._id}`);
     });
 
     it("successfully Gets a single Todo item", () => {
-      should.exists(result);
+      expect(result.body).toBeDefined();
 
-      result.text.should.be.defined;
+      expect(result.body.todo.text).toBeDefined();
 
-      result.id.should.be.defined;
+      expect(result.body.todo.text).toEqual("Todoist3");
 
-      assert.ok(
-        result.text === "Todoist3",
-        "created todo text not equal 'Todoist'"
-      );
+      expect(result.body.status).toEqual("success");
+
+      expect(result.body.todo._id).toBeDefined();
     });
   });
 
   describe("Remove Todo", () => {
-    const todo1 = { text: "first todo" };
-    let created1 = null;
-    let deleted1 = null;
+    const todo1 = { todo: { text: "first todo" } };
+    let created = null;
+    let deleted = null;
 
-    before(async () => {
-      created1 = await addTodo(todo1);
-      deleted1 = await removeTodo(created1.id);
+    beforeAll(async done => {
+      created = await request(app)
+        .post("/todo/create")
+        .send(todo1);
+
+      deleted = await request(app).delete(`/todo/${created.body.todo._id}`);
+
+      result = await request(app).get(`/todo/${deleted.body.todo._id}`);
+      done();
     });
 
     it("successfully Removes Todo", () => {
-      should.exists(deleted1);
+      expect(deleted.body).toBeDefined();
 
-      deleted1.text.should.be.defined;
+      expect(deleted.body.todo.text).toBeDefined();
 
-      deleted1.id.should.be.defined;
+      expect(deleted.body.todo.text).toEqual("first todo");
 
-      assert.ok(
-        deleted1.text === "first todo",
-        "deleted todo text not equal 'first todo'"
-      );
+      expect(deleted.body.status).toEqual("success");
 
-      deleted1.text.should.equal(created1.text);
+      expect(deleted.body.todo._id).toEqual(created.body.todo._id);
+
+      expect(deleted.body.message).toEqual("Todo successfully removed");
+    });
+
+    it("returns null for removed todo", () => {
+      expect(result.body).toBeDefined();
+
+      expect(result.body.todo).toBeNull();
+
+      expect(result.body.status).toEqual("success");
+
+      expect(result.body.message).toEqual("No Todo Found");
     });
   });
 
   describe("Update Todo", () => {
-    const todo = { text: "create" };
+    const todo = { todo: { text: "create" } };
     let created = null;
     let updated = null;
 
-    before(async () => {
-      created = await addTodo(todo);
-      updated = await updateOne({
-        id: created.id,
-        todoInfo: { text: "update" }
-      });
+    beforeAll(async done => {
+      created = await request(app)
+        .post("/todo/create")
+        .send(todo);
+
+      updated = await request(app)
+        .put(`/todo/${created.body.todo._id}`)
+        .send({ todo: { text: "updated todo" } });
+      done();
     });
 
     it("successfully Updates Todo", () => {
-      should.exists(updated);
+      expect(updated.body).toBeDefined();
 
-      updated.text.should.equal("update");
+      expect(updated.body.todo.text).toBeDefined();
+
+      expect(updated.body.todo.text).toEqual("updated todo");
+
+      expect(updated.body.status).toEqual("success");
+
+      expect(updated.body.todo._id).toEqual(created.body.todo._id);
+
+      expect(updated.body.message).toEqual("Todo successfully updated");
     });
   });
 });

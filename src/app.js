@@ -1,6 +1,15 @@
 var createError = require("http-errors");
 var express = require("express");
+const mongoose = require("mongoose");
 const loader = require("./loaders");
+const dotenv = require("dotenv");
+require("./setupdb");
+const config = require("./config");
+
+dotenv.config();
+
+// // call function to setup database
+// setupDB();
 
 // user defined
 const routes = require("./routes");

@@ -1,57 +1,60 @@
-const generateId = () =>
-  Math.random()
-    .toString(36)
-    .substring(2, 15) +
-  Math.random()
-    .toString(36)
-    .substring(2, 15);
-
-const makeTodoDb = () => {
+const makeTodoDb = TodoModel => {
   let todoList = [];
 
-  const insert = todo => {
-    const toInsert = { ...todo, id: generateId() };
-    todoList.push(toInsert);
-
-    return toInsert;
+  const insert = async todo => {
+    const inserted = await new TodoModel(todo);
+    console.log("insert ", inserted);
+    inserted.save();
+    return inserted;
   };
 
-  findAll = () => todoList;
+  findAll = () => {
+    return TodoModel.find()
+      .then(result => {
+        return result;
+      })
+      .catch(err => {
+        console.log("eer ", err);
+        return null;
+      });
+  };
 
   findByText = text => {
-    const found = todoList.find(todo => todo.text === text) || null;
-    console.log("found ", found);
-    return found;
+    return TodoModel.findOne({ text })
+      .then(result => {
+        return result;
+      })
+      .catch(err => null);
   };
 
   findById = id => {
-    const found = todoList.find(todo => todo.id === id) || null;
-
-    return found;
+    return TodoModel.findById(id)
+      .then(found => {
+        // console.log("err ", err);
+        console.log("todo ", found, " id ", id);
+        return found;
+      })
+      .catch(err => {
+        console.log("err ", err);
+        return null;
+      });
   };
 
-  findByIdAndDelete = id => {
-    const found = findById(id);
+  findByIdAndDelete = async id => {
+    const found = await TodoModel.findByIdAndDelete(id);
     if (!found) return null;
 
-    todoList = todoList.filter(todo => todo.id !== found.id);
-    console.log("todolist updated ", todoList.length);
-
     return found;
   };
 
-  findByIdAndUpdate = (id, update) => {
+  findByIdAndUpdate = async (id, update) => {
     if (!id) throw new Error("Id must be supplied");
 
-    const found = findById(id);
-    if (!found) throw new Error("Todo doesnt exists");
+    const found = await TodoModel.findByIdAndUpdate(id, update);
+    if (!found) throw new Error("Todo doesn't exists");
 
-    todoList = todoList.map(todo => {
-      if (todo.id == found.id) return { ...todo, ...update };
-      return todo;
-    });
-
-    const updated = findById(id);
+    const updated = await TodoModel.findById(id);
+    console.log("update ", updated);
     return updated;
   };
 
