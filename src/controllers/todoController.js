@@ -12,6 +12,7 @@ const TodoController = ({
   async function postTodo(httpRequest) {
     try {
       const { todo: todoInfo } = httpRequest.body;
+
       const todo = await addTodo(todoInfo);
 
       return {

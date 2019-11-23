@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
-const config = require("./config");
+const config = require("../config");
 
-function setupDB() {
+async function mongooseLoader() {
   // load db
   console.log(process.env.NODE_ENV, config.MONGODB_URI);
   const database = config.MONGODB_URI;
 
-  mongoose.connect(database, {
+  await mongoose.connect(database, {
     useCreateIndex: true,
     useNewUrlParser: true
   });
@@ -20,6 +20,4 @@ function setupDB() {
   });
 }
 
-setupDB();
-
-module.exports = mongoose.connection;
+module.exports = { mongooseLoader };

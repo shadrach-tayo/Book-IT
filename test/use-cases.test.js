@@ -1,8 +1,15 @@
 const request = require("supertest");
 const app = require("../src/app");
-const db = require("../src/setupdb");
+const { db } = require("../src/app");
+const mongoose = require("mongoose");
 
 describe("Todo uses cases or services", () => {
+  beforeAll(async done => {
+    mongoose.connection.on("connected", () => {
+      done();
+    });
+  });
+
   afterAll(async () => {
     await db.collection("todos").deleteMany();
   });
@@ -11,12 +18,17 @@ describe("Todo uses cases or services", () => {
     const todo = {
       text: "Todoist"
     };
+    let res = null;
 
-    it("successfully Adds Todo", async () => {
-      const res = await request(app)
+    beforeAll(async done => {
+      res = await request(app)
         .post("/todo/create")
         .send({ todo });
 
+      done();
+    });
+
+    it("successfully Adds Todo", async () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body.todo.text).toEqual(todo.text);
       expect(res.body.todo._id).toBeDefined();
