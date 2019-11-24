@@ -11,5 +11,5 @@ if (process.env.NODE_ENV === "development") {
 } else if (process.env.NODE_ENV === "test") {
   config = testConfig;
 }
-console.log(config);
+
 module.exports = config;

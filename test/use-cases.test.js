@@ -23,7 +23,7 @@ describe("Todo uses cases or services", () => {
     beforeAll(async done => {
       res = await request(app)
         .post("/todo/create")
-        .send({ todo });
+        .send(todo);
 
       done();
     });
@@ -44,7 +44,7 @@ describe("Todo uses cases or services", () => {
     beforeAll(async () => {
       res = await request(app)
         .post("/todo/create")
-        .send({ todo });
+        .send(todo);
     });
 
     it("returns an error status", () => {
@@ -62,14 +62,10 @@ describe("Todo uses cases or services", () => {
 
   describe("Get Todos", () => {
     const todo1 = {
-      todo: {
-        text: "Todoist1"
-      }
+      text: "Todoist1"
     };
     const todo2 = {
-      todo: {
-        text: "Todoist2"
-      }
+      text: "Todoist2"
     };
     let created1 = null;
     let created2 = null;
@@ -107,9 +103,7 @@ describe("Todo uses cases or services", () => {
 
   describe("Get Todo", () => {
     const todo1 = {
-      todo: {
-        text: "Todoist3"
-      }
+      text: "Todoist3"
     };
 
     let created = null;
@@ -137,7 +131,7 @@ describe("Todo uses cases or services", () => {
   });
 
   describe("Remove Todo", () => {
-    const todo1 = { todo: { text: "first todo" } };
+    const todo1 = { text: "first todo" };
     let created = null;
     let deleted = null;
 
@@ -178,7 +172,7 @@ describe("Todo uses cases or services", () => {
   });
 
   describe("Update Todo", () => {
-    const todo = { todo: { text: "create" } };
+    const todo = { text: "create" };
     let created = null;
     let updated = null;
 
@@ -189,7 +183,7 @@ describe("Todo uses cases or services", () => {
 
       updated = await request(app)
         .put(`/todo/${created.body.todo._id}`)
-        .send({ todo: { text: "updated todo" } });
+        .send({ text: "updated todo" });
       done();
     });
 
