@@ -3,6 +3,12 @@
 // const { db } = require("../src/app");
 // const mongoose = require("mongoose");
 
+describe("migrate tests", () => {
+  it("start migration", () => {
+    expect(2).toEqual(2);
+  });
+});
+
 // describe("Todo uses cases or services", () => {
 //   beforeAll(async done => {
 //     mongoose.connection.on("connected", () => {
