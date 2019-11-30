@@ -1,6 +1,4 @@
 const makeTodoDb = TodoModel => {
-  let todoList = [];
-
   const insert = async todo => {
     const inserted = await new TodoModel(todo);
     console.log("insert ", inserted);
