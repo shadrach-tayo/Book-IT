@@ -1,28 +1,35 @@
-const todoController = require("../controllers");
+const { userController } = require("../controllers");
 const makeCallback = require("./callback");
 const multer = require("multer");
 
-const upload = multer();
+// middlewares
+const { verifyUserMiddleware } = require("../authorization/middlewares");
+const { authValidationMiddleware } = require("../common/middlewares");
+
+const createUserRoutes = require("./users");
+const createAuthRoutes = require("./auth");
+
+const userRoute = createUserRoutes({
+  multer,
+  makeCallback,
+  userController,
+  authValidationMiddleware
+});
+
+const authRoute = createAuthRoutes({
+  multer,
+  makeCallback,
+  userController,
+  verifyUserMiddleware
+});
 
 module.exports = router => {
+  userRoute(router);
+  authRoute(router);
+
   /* GET home page. */
 
   router.route("/").get(function(req, res, next) {
     res.render("index", { title: "Express" });
   });
-  router.route("/todos").get(makeCallback(todoController.getAll));
-  router.route("/todo/:id").get(makeCallback(todoController.getOne));
-  // router.route("/todo/:id").put(makeCallback(todoController.updateTodo));
-  // router.route("/todo/:id").put(makeCallback(todoController.getOne)); TODO!!!
-  router.route("/todo/:id").delete(makeCallback(todoController.deleteTodo));
-  router.put(
-    "/todo/:id",
-    upload.none(),
-    makeCallback(todoController.updateTodo)
-  );
-  router.post(
-    "/todo/create",
-    upload.none(),
-    makeCallback(todoController.postTodo)
-  );
 };

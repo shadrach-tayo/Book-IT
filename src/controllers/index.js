@@ -1,18 +1,6 @@
-const {
-  addTodo,
-  getTodos,
-  getTodo,
-  removeTodo,
-  updateOne
-} = require("../use-cases");
-const TodoController = require("./todoController");
+const { UserService } = require("../services");
+const UserController = require("./usersController");
 
-const todoController = TodoController({
-  addTodo,
-  getTodos,
-  getTodo,
-  removeTodo,
-  updateOne
-});
+const userController = UserController({ UserService });
 
-module.exports = todoController;
+module.exports = { userController };

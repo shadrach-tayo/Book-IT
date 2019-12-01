@@ -1,9 +1,35 @@
-var express = require("express");
-var router = express.Router();
+const createUserRoutes = ({
+  multer,
+  makeCallback,
+  userController,
+  authValidationMiddleware
+}) => {
+  const upload = multer();
 
-/* GET users listing. */
-router.get("/", function(req, res, next) {
-  res.send("respond with a resource");
-});
+  return function(router) {
+    router.post("/signup", upload.none(), makeCallback(userController.Signup));
+    router.post("/login", upload.none(), makeCallback(userController.Login));
+    router.get(
+      "/user/:id",
+      [upload.none(), authValidationMiddleware.validJWTNeeded],
+      makeCallback(userController.getById)
+    );
+    router.get(
+      "/user",
+      [upload.none(), authValidationMiddleware.validJWTNeeded],
+      makeCallback(userController.getSingleUser)
+    );
+    router.get(
+      "/users",
+      [upload.none(), authValidationMiddleware.validJWTNeeded],
+      makeCallback(userController.listUsers)
+    );
+    router.put(
+      "/user/:id",
+      [upload.none(), authValidationMiddleware.validJWTNeeded],
+      makeCallback(userController.updateById)
+    );
+  };
+};
 
-// module.exports = router;
+module.exports = createUserRoutes;

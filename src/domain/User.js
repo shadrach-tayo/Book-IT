@@ -7,10 +7,12 @@ module.exports = function buildMakeUser() {
     zip,
     phone,
     username,
-    email
+    email,
+    password
   }) {
     // validate hotle data before creating and saving it to database
     if (!firstname) throw new Error("firstname cannot be empty");
+    if (!password) throw new Error("password cannot be empty");
     if (!lastname) throw new Error("lastname cannot be empty");
     if (!username) throw new Error("username cannot be empty");
     if (!email) throw new Error("email cannot be empty"); // validate email correctly
@@ -21,6 +23,9 @@ module.exports = function buildMakeUser() {
 
     if (firstname.length < 4)
       throw new Error("firstname must be at least 4 characters");
+
+    if (password.length < 6)
+      throw new Error("firstname must be at least 6 characters");
 
     if (lastname.length < 4)
       throw new Error("lastname must be at least 4 characters");
@@ -39,7 +44,8 @@ module.exports = function buildMakeUser() {
       zip,
       phone,
       username,
-      email
+      email,
+      password
     };
   };
 };

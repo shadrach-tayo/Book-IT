@@ -7,6 +7,7 @@ module.exports = function makeExpressCallabck(controller) {
       ip: req.ip,
       method: req.method,
       path: req.path,
+      jwt: req.jwt,
       headers: {
         "Content-Type": req.get("Content-Type"),
         Referer: req.get("referer"),

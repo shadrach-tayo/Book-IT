@@ -1,6 +1,6 @@
-const makeTodoDb = require("./todoDb");
-const TodoModel = require("../models/Todo");
+const makeUserDb = require("./userDb");
+const UserModel = require("../models/user");
 
-const todoDb = makeTodoDb(TodoModel);
+const userDb = makeUserDb(UserModel);
 
-module.exports = { todoDb };
+module.exports = { userDb };
