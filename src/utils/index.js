@@ -5,7 +5,6 @@ function sanitizeUserData(userObj) {
   delete obj._id;
   delete obj.__v;
   delete obj.permissionLevel;
-  console.log("sanitized ", obj);
   return obj;
 }
 

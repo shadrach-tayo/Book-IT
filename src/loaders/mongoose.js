@@ -3,7 +3,7 @@ const config = require("../config");
 
 async function mongooseLoader() {
   // load db
-  console.log(process.env.NODE_ENV, config.MONGODB_URI);
+  // console.log(process.env.NODE_ENV, config.MONGODB_URI);
   const database = config.MONGODB_URI;
 
   await mongoose.connect(database, {

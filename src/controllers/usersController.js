@@ -153,7 +153,7 @@ const UserController = ({ UserService }) => {
         body: {
           status: "success",
           message: "Profile successfully updated",
-          updatedUser
+          user: updatedUser
         }
       };
     } catch (error) {

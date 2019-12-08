@@ -1,7 +1,7 @@
 const makeUserDb = UserModel => {
   const insert = async user => {
     const inserted = await new UserModel(user);
-    console.log("insert ", inserted);
+    // console.log("insert ", inserted);
     inserted.save();
     return inserted;
   };
@@ -35,7 +35,7 @@ const makeUserDb = UserModel => {
       .then(results => {
         const found = results[0];
         // console.log("err ", err);
-        console.log("user ", found, " email ", email);
+        // console.log("user ", found, " email ", email);
         return found;
       })
       .catch(err => {

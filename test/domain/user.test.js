@@ -1,9 +1,9 @@
 const { User } = require("../../src/domain");
-const userdata = require("../mocks/user");
+const users = require("../mocks/user");
 
 describe("User", () => {
   describe("Creates User", () => {
-    const user = userdata;
+    const user = users[0];
     const created = User(user);
 
     it("returns a user object", () => {
@@ -32,7 +32,7 @@ describe("User", () => {
 
     it("has a valid phone", () => {
       expect(created.phone).toBeDefined();
-      expect(typeof created.phone).toEqual("string");
+      expect(typeof created.phone).toEqual("number");
     });
 
     it("has a valid city", () => {
@@ -47,7 +47,7 @@ describe("User", () => {
 
     it("has a valid zip code", () => {
       expect(created.zip).toBeDefined();
-      expect(typeof created.zip).toEqual("string");
+      expect(typeof created.zip).toEqual("number");
     });
   });
 

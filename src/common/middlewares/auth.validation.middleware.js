@@ -4,7 +4,7 @@ function createAuthValidation({ config, jwt }) {
       try {
         const authorization = request.headers["authorization"].split(" ");
         if (authorization[0] !== "Bearer") {
-          return res
+          return response
             .status(401)
             .send({ status: "error", message: "Not authorized" });
         } else {

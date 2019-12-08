@@ -11,9 +11,19 @@ const {
 } = require("../common/middlewares");
 
 const createUserRoutes = require("./users");
+const createAdminRoutes = require("./admin");
 const createAuthRoutes = require("./auth");
 
 const userRoute = createUserRoutes({
+  multer,
+  makeCallback,
+  userController,
+  authValidationMiddleware,
+  permissionsMiddleware,
+  permissions
+});
+
+const adminRoute = createAdminRoutes({
   multer,
   makeCallback,
   userController,
@@ -32,6 +42,7 @@ const authRoute = createAuthRoutes({
 module.exports = router => {
   userRoute(router);
   authRoute(router);
+  adminRoute(router);
 
   /* GET home page. */
 
