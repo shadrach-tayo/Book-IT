@@ -25,7 +25,7 @@ module.exports = function buildMakeUser() {
       throw new Error("firstname must be at least 4 characters");
 
     if (password.length < 6)
-      throw new Error("firstname must be at least 6 characters");
+      throw new Error("password must be at least 6 characters");
 
     if (lastname.length < 4)
       throw new Error("lastname must be at least 4 characters");

@@ -1,6 +1,6 @@
 const { User } = require("../domain");
 
-function createUserService({ userDb, crypto, config, jwt }) {
+function createUserService({ userDb, crypto, config, jwt, sanitizeUserData }) {
   async function Signup(userData) {
     const user = User(userData);
 
@@ -17,9 +17,11 @@ function createUserService({ userDb, crypto, config, jwt }) {
       .digest("base64");
 
     user.password = `${salt}$${hash}`;
-    user.permissionLevel = 1;
+    user.permissionLevel = 3;
 
-    return userDb.insert(user);
+    const savedUser = await userDb.insert(user);
+
+    return sanitizeUserData(savedUser);
   }
 
   async function Login(userData) {
@@ -45,8 +47,9 @@ function createUserService({ userDb, crypto, config, jwt }) {
     if (!exists) {
       throw new Error("User not found!!!");
     }
+    const sanitized = sanitizeUserData(exists);
 
-    return exists;
+    return sanitized;
   }
 
   async function findByEmail(id) {
@@ -55,14 +58,15 @@ function createUserService({ userDb, crypto, config, jwt }) {
     if (!exists) {
       throw new Error("User not found!!!");
     }
+    const sanitized = sanitizeUserData(exists);
 
-    return exists;
+    return sanitized;
   }
 
   async function listAll() {
     const users = await userDb.findAll();
 
-    return users;
+    return users.map(user => sanitizeUserData(user));
   }
 
   async function updateUser({ id, user }) {
@@ -83,10 +87,24 @@ function createUserService({ userDb, crypto, config, jwt }) {
 
     const updatedUser = await userDb.findByIdAndUpdate(id, user);
 
-    return updatedUser;
+    return sanitizeUserData(updatedUser);
   }
 
-  return { Signup, Login, findById, findByEmail, updateUser, listAll };
+  async function removeUser(id) {
+    const deletedUser = await userDb.findByIdAndDelete(id);
+
+    return deletedUser;
+  }
+
+  return {
+    Signup,
+    Login,
+    findById,
+    findByEmail,
+    removeUser,
+    updateUser,
+    listAll
+  };
 }
 
 module.exports = createUserService;

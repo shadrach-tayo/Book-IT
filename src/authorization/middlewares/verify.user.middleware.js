@@ -1,7 +1,7 @@
-function createVerifyUserMiddleware({ UserService, crypto }) {
+function createVerifyUserMiddleware({ userDb, crypto }) {
   async function isPasswordAndUserMatch(request, response, next) {
     try {
-      const user = await UserService.findByEmail(request.body.email);
+      const user = await userDb.findByEmail(request.body.email);
       const passwordFields = user.password.split("$");
 
       const salt = passwordFields[0];
@@ -16,7 +16,7 @@ function createVerifyUserMiddleware({ UserService, crypto }) {
           email: user.email,
           permissionLevel: user.permissionLevel,
           provider: "email",
-          name: user.firstName + " " + user.lastName
+          name: user.firstname + " " + user.lastname
         };
         return next();
       } else {

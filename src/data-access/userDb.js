@@ -55,12 +55,21 @@ const makeUserDb = UserModel => {
     return updated;
   };
 
+  findByIdAndDelete = async id => {
+    if (!id) throw new Error("Id must be supplied");
+
+    const deleted = await UserModel.findByIdAndDelete(id);
+
+    return deleted;
+  };
+
   return {
     insert,
     findAll,
     findById,
     findByEmail,
-    findByIdAndUpdate
+    findByIdAndUpdate,
+    findByIdAndDelete
   };
 };
 

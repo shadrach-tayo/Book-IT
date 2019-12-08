@@ -105,7 +105,7 @@ const UserController = ({ UserService }) => {
    */
   async function getSingleUser(httpRequest) {
     try {
-      console.log("jwt data ", httpRequest.jwt);
+      // console.log("jwt data ", httpRequest.jwt);
 
       const { userId: id } = httpRequest.jwt;
 
@@ -152,8 +152,43 @@ const UserController = ({ UserService }) => {
         },
         body: {
           status: "success",
-          message: "User successfully logged In",
+          message: "Profile successfully updated",
           updatedUser
+        }
+      };
+    } catch (error) {
+      return {
+        headers: {
+          ...httpRequest.headers
+        },
+        statusCode: 400,
+        body: {
+          status: "error",
+          message: error.message
+        }
+      };
+    }
+  }
+
+  /**
+   * Funtion to handle updating  user's data
+   * @param {object} httpRequest
+   */
+  async function deleteById(httpRequest) {
+    try {
+      const id = httpRequest.params.id;
+      // const user = httpRequest.body;
+
+      const deletedUser = await UserService.removeUser(id);
+
+      return {
+        headers: {
+          ...httpRequest.headers
+        },
+        body: {
+          status: "success",
+          message: "User successfully deleted",
+          deletedUser
         }
       };
     } catch (error) {
@@ -183,7 +218,7 @@ const UserController = ({ UserService }) => {
         },
         body: {
           status: "success",
-          message: "User successfully logged In",
+          // message: "User successfully logged In",
           users
         }
       };
@@ -207,7 +242,8 @@ const UserController = ({ UserService }) => {
     getById,
     updateById,
     listUsers,
-    getSingleUser
+    getSingleUser,
+    deleteById
   };
 };
 

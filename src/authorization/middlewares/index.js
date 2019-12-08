@@ -1,10 +1,10 @@
-const { UserService } = require("../../services");
+const { userDb } = require("../../data-access");
 const crypto = require("crypto");
 const createVerifyUserMiddleware = require("./verify.user.middleware");
 
 // initialize middlewares
 const verifyUserMiddleware = createVerifyUserMiddleware({
-  UserService,
+  userDb,
   crypto
 });
 

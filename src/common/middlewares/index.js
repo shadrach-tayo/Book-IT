@@ -1,4 +1,5 @@
 const createAuthValidation = require("./auth.validation.middleware");
+const permissionsMiddleware = require("./auth.permission.middleware");
 const jwt = require("jsonwebtoken");
 const config = require("../../config");
 
@@ -8,4 +9,4 @@ const authValidationMiddleware = createAuthValidation({
   config
 });
 
-module.exports = { authValidationMiddleware };
+module.exports = { authValidationMiddleware, permissionsMiddleware };

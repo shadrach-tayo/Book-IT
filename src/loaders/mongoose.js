@@ -8,6 +8,7 @@ async function mongooseLoader() {
 
   await mongoose.connect(database, {
     useCreateIndex: true,
+    useUnifiedTopology: true,
     useNewUrlParser: true
   });
 

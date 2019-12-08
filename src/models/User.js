@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const User = mongoose.Schema({
+const userSchema = mongoose.Schema({
   lastname: String,
   firstname: String,
   street: String,
@@ -13,13 +13,23 @@ const User = mongoose.Schema({
   permissionLevel: Number
 });
 
-User.methods.toJSON = function() {
+userSchema.virtual("id").get(function() {
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are serialised.
+userSchema.set("toJSON", {
+  virtuals: true
+});
+
+userSchema.methods.toJSON = function() {
   let obj = this.toObject();
   // delete obj.password;
+
   delete obj.__v;
   obj.id = obj._id;
   delete obj._id;
   return obj;
 };
 
-module.exports = mongoose.model("User", User);
+module.exports = mongoose.model("User", userSchema);

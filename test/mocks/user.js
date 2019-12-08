@@ -6,7 +6,8 @@ const user = {
   zip: "102345",
   phone: "09055334491",
   username: "testing",
-  email: "test@gmail.com"
+  email: "test@gmail.com",
+  password: "adfionaldf"
 };
 
 module.exports = user;

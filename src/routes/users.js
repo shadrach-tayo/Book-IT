@@ -2,7 +2,9 @@ const createUserRoutes = ({
   multer,
   makeCallback,
   userController,
-  authValidationMiddleware
+  authValidationMiddleware,
+  permissionsMiddleware,
+  permissions
 }) => {
   const upload = multer();
 
@@ -10,24 +12,59 @@ const createUserRoutes = ({
     router.post("/signup", upload.none(), makeCallback(userController.Signup));
     router.post("/login", upload.none(), makeCallback(userController.Login));
     router.get(
-      "/user/:id",
-      [upload.none(), authValidationMiddleware.validJWTNeeded],
+      "/users/:id",
+      [
+        upload.none(),
+        authValidationMiddleware.validJWTNeeded,
+        permissionsMiddleware.minimumPermissionLevelRequired(permissions.FREE),
+        permissionsMiddleware.onlySameUserOrAdminCanDoThisAction(
+          permissions.ADMIN
+        )
+      ],
       makeCallback(userController.getById)
     );
     router.get(
       "/user",
-      [upload.none(), authValidationMiddleware.validJWTNeeded],
+      [
+        upload.none(),
+        authValidationMiddleware.validJWTNeeded,
+        permissionsMiddleware.minimumPermissionLevelRequired(permissions.FREE)
+      ],
       makeCallback(userController.getSingleUser)
     );
     router.get(
       "/users",
-      [upload.none(), authValidationMiddleware.validJWTNeeded],
+      [
+        upload.none(),
+        authValidationMiddleware.validJWTNeeded,
+        permissionsMiddleware.minimumPermissionLevelRequired(permissions.FREE)
+      ],
       makeCallback(userController.listUsers)
     );
     router.put(
-      "/user/:id",
-      [upload.none(), authValidationMiddleware.validJWTNeeded],
+      "/users/:id",
+      [
+        upload.none(),
+        authValidationMiddleware.validJWTNeeded,
+        permissionsMiddleware.minimumPermissionLevelRequired(
+          permissions.CAN_EDIT_USER
+        ),
+        permissionsMiddleware.onlySameUserOrAdminCanDoThisAction(
+          permissions.CAN_EDIT_ALL
+        )
+      ],
       makeCallback(userController.updateById)
+    );
+    router.delete(
+      "/users/:id",
+      [
+        upload.none(),
+        authValidationMiddleware.validJWTNeeded,
+        permissionsMiddleware.minimumPermissionLevelRequired(
+          permissions.CAN_DELETE_USER
+        )
+      ],
+      makeCallback(userController.deleteById)
     );
   };
 };
