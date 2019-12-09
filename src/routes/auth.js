@@ -2,7 +2,9 @@ const createAuthRoutes = ({
   multer,
   makeCallback,
   userController,
-  verifyUserMiddleware
+  authController,
+  verifyUserMiddleware,
+  authValidationMiddleware
 }) => {
   const upload = multer();
 
@@ -11,6 +13,15 @@ const createAuthRoutes = ({
       "/auth",
       [upload.none(), verifyUserMiddleware.isPasswordAndUserMatch],
       makeCallback(userController.Login)
+    );
+    router.post(
+      "/auth/refresh",
+      [
+        upload.none(),
+        authValidationMiddleware.verifyRefreshBodyField,
+        authValidationMiddleware.validRefreshNeeded
+      ],
+      makeCallback(authController.refreshToken)
     );
   };
 };

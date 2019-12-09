@@ -1,4 +1,5 @@
 const createUserService = require("./user");
+const createAuthenticationService = require("./auth");
 const crypto = require("crypto");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
@@ -14,4 +15,12 @@ const UserService = createUserService({
   sanitizeUserData
 });
 
-module.exports = { UserService };
+const AuthenticationService = createAuthenticationService({
+  userDb,
+  crypto,
+  config,
+  jwt,
+  sanitizeUserData
+});
+
+module.exports = { UserService, AuthService: AuthenticationService };

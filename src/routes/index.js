@@ -1,5 +1,5 @@
 const multer = require("multer");
-const { userController } = require("../controllers");
+const { userController, authController } = require("../controllers");
 const makeCallback = require("./callback");
 const permissions = require("../common/permissions");
 
@@ -36,7 +36,9 @@ const authRoute = createAuthRoutes({
   multer,
   makeCallback,
   userController,
-  verifyUserMiddleware
+  authController,
+  verifyUserMiddleware,
+  authValidationMiddleware
 });
 
 module.exports = router => {
