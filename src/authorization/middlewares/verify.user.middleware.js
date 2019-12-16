@@ -14,7 +14,7 @@ function createVerifyUserMiddleware({ userDb, crypto }) {
         request.body = {
           userId: user.id,
           email: user.email,
-          permissionLevel: user.permissionLevel,
+          role: user.role,
           provider: "email",
           name: user.firstname + " " + user.lastname
         };

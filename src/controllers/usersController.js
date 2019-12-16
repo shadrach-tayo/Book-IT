@@ -36,7 +36,7 @@ const UserController = ({ UserService }) => {
    * Funtion to handle creating a new user
    * @param {object} httpRequest
    */
-  async function Login(httpRequest) {
+  /* async function Login(httpRequest) {
     try {
       const userData = httpRequest.body;
       const data = await UserService.Login(userData);
@@ -64,7 +64,7 @@ const UserController = ({ UserService }) => {
         }
       };
     }
-  }
+  } */
 
   /**
    * Funtion to handle returning a user
@@ -238,7 +238,7 @@ const UserController = ({ UserService }) => {
 
   return {
     Signup,
-    Login,
+    // Login,
     getById,
     updateById,
     listUsers,

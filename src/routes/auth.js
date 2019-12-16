@@ -1,7 +1,6 @@
 const createAuthRoutes = ({
   multer,
   makeCallback,
-  userController,
   authController,
   verifyUserMiddleware,
   authValidationMiddleware
@@ -12,7 +11,7 @@ const createAuthRoutes = ({
     router.post(
       "/auth",
       [upload.none(), verifyUserMiddleware.isPasswordAndUserMatch],
-      makeCallback(userController.Login)
+      makeCallback(authController.Login)
     );
     router.post(
       "/auth/refresh",

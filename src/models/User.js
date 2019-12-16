@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
   username: String,
   email: String,
   password: String,
-  permissionLevel: Number
+  role: String
 });
 
 userSchema.virtual("id").get(function() {

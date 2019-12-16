@@ -1,6 +1,13 @@
 const { User } = require("../domain");
 
-function createUserService({ userDb, crypto, config, jwt, sanitizeUserData }) {
+function createUserService({
+  userDb,
+  crypto,
+  config,
+  jwt,
+  sanitizeUserData,
+  permissions
+}) {
   async function Signup(userData) {
     const user = User(userData);
 
@@ -17,14 +24,14 @@ function createUserService({ userDb, crypto, config, jwt, sanitizeUserData }) {
       .digest("base64");
 
     user.password = `${salt}$${hash}`;
-    user.permissionLevel = 3;
+    user.role = "basic";
 
     const savedUser = await userDb.insert(user);
 
     return sanitizeUserData(savedUser);
   }
 
-  async function Login(userData) {
+  /* async function Login(userData) {
     const refreshId = userData.userId + config.jwtSecret;
     const salt = crypto.randomBytes(16).toString("base64");
     const hash = crypto
@@ -40,6 +47,7 @@ function createUserService({ userDb, crypto, config, jwt, sanitizeUserData }) {
 
     return { refreshToken: refresh_token, accessToken: token };
   }
+  */
 
   async function findById(id) {
     const exists = await userDb.findById(id);
@@ -98,7 +106,6 @@ function createUserService({ userDb, crypto, config, jwt, sanitizeUserData }) {
 
   return {
     Signup,
-    Login,
     findById,
     findByEmail,
     removeUser,

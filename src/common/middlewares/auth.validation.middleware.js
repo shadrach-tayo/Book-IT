@@ -1,4 +1,4 @@
-function createAuthValidation({ config, jwt }) {
+function createAuthValidation({ config, jwt, crypto }) {
   async function validJWTNeeded(request, response, next) {
     if (request.headers["authorization"]) {
       try {

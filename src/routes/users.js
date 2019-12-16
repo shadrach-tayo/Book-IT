@@ -3,23 +3,20 @@ const createUserRoutes = ({
   makeCallback,
   userController,
   authValidationMiddleware,
-  permissionsMiddleware,
-  permissions
+  permissionsMiddleware
 }) => {
   const upload = multer();
 
   return function(router) {
     router.post("/signup", upload.none(), makeCallback(userController.Signup));
-    router.post("/login", upload.none(), makeCallback(userController.Login));
+    // router.post("/login", upload.none(), makeCallback(userController.Login));
     router.get(
       "/users/:id",
       [
         upload.none(),
         authValidationMiddleware.validJWTNeeded,
-        permissionsMiddleware.minimumPermissionLevelRequired(permissions.FREE),
-        permissionsMiddleware.onlySameUserOrAdminCanDoThisAction(
-          permissions.ADMIN
-        )
+        permissionsMiddleware.grantAccess(["readAny", "readOwn"], "profile"),
+        permissionsMiddleware.isSameUserOrAdmin
       ],
       makeCallback(userController.getById)
     );
@@ -28,7 +25,7 @@ const createUserRoutes = ({
       [
         upload.none(),
         authValidationMiddleware.validJWTNeeded,
-        permissionsMiddleware.minimumPermissionLevelRequired(permissions.FREE)
+        permissionsMiddleware.grantAccess("readOwn", "profile")
       ],
       makeCallback(userController.getSingleUser)
     );
@@ -37,7 +34,7 @@ const createUserRoutes = ({
       [
         upload.none(),
         authValidationMiddleware.validJWTNeeded,
-        permissionsMiddleware.minimumPermissionLevelRequired(permissions.FREE)
+        permissionsMiddleware.grantAccess("readAny", "profile")
       ],
       makeCallback(userController.listUsers)
     );
@@ -46,12 +43,11 @@ const createUserRoutes = ({
       [
         upload.none(),
         authValidationMiddleware.validJWTNeeded,
-        permissionsMiddleware.minimumPermissionLevelRequired(
-          permissions.CAN_EDIT_USER
+        permissionsMiddleware.grantAccess(
+          ["updateAny", "updateOwn"],
+          "profile"
         ),
-        permissionsMiddleware.onlySameUserOrAdminCanDoThisAction(
-          permissions.CAN_EDIT_ALL
-        )
+        permissionsMiddleware.isSameUserOrAdmin
       ],
       makeCallback(userController.updateById)
     );
@@ -60,9 +56,7 @@ const createUserRoutes = ({
       [
         upload.none(),
         authValidationMiddleware.validJWTNeeded,
-        permissionsMiddleware.minimumPermissionLevelRequired(
-          permissions.CAN_DELETE_USER
-        )
+        permissionsMiddleware.grantAccess("deleteAny", "profile")
       ],
       makeCallback(userController.deleteById)
     );

@@ -21,7 +21,7 @@ const makeUserDb = UserModel => {
     return UserModel.findById(id)
       .then(found => {
         // console.log("err ", err);
-        console.log("user ", found, " id ", id);
+        // console.log("user ", found, " id ", id);
         return found;
       })
       .catch(err => {
@@ -51,7 +51,6 @@ const makeUserDb = UserModel => {
     if (!found) throw new Error("user doesn't exists");
 
     const updated = await UserModel.findById(id);
-    console.log("update ", updated);
     return updated;
   };
 

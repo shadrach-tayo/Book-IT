@@ -1,7 +1,6 @@
 const multer = require("multer");
 const { userController, authController } = require("../controllers");
 const makeCallback = require("./callback");
-const permissions = require("../common/permissions");
 
 // middlewares
 const { verifyUserMiddleware } = require("../authorization/middlewares");
@@ -19,17 +18,15 @@ const userRoute = createUserRoutes({
   makeCallback,
   userController,
   authValidationMiddleware,
-  permissionsMiddleware,
-  permissions
+  permissionsMiddleware
 });
 
 const adminRoute = createAdminRoutes({
   multer,
   makeCallback,
-  userController,
+  authController,
   authValidationMiddleware,
-  permissionsMiddleware,
-  permissions
+  permissionsMiddleware
 });
 
 const authRoute = createAuthRoutes({
