@@ -6,6 +6,13 @@ var cookieParser = require("cookie-parser");
 // user defined
 const routes = require("../routes");
 
+function createError(status) {
+  return (req, res, next) => {
+    const error = { status, message: "Server error" };
+    next(error);
+  };
+}
+
 module.exports = async app => {
   // view engine setup
   app.set("views", path.join(__dirname, "../views"));

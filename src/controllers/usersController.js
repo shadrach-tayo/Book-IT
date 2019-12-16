@@ -139,6 +139,44 @@ const UserController = ({ UserService }) => {
    * Funtion to handle updating  user's data
    * @param {object} httpRequest
    */
+  async function suspendById(httpRequest) {
+    try {
+      const id = httpRequest.params.id;
+
+      const suspended = httpRequest.query.suspend === "true";
+      const user = { suspended };
+
+      const updatedUser = await UserService.updateUser({ id, user });
+
+      return {
+        headers: {
+          ...httpRequest.headers
+        },
+        body: {
+          status: "success",
+          message: `User successfully ${
+            suspended ? "Suspended" : "Unsuspended"
+          }`,
+          user: updatedUser
+        }
+      };
+    } catch (error) {
+      return {
+        headers: {
+          ...httpRequest.headers
+        },
+        statusCode: 400,
+        body: {
+          status: "error",
+          message: error.message
+        }
+      };
+    }
+  }
+  /**
+   * Funtion to handle updating  user's data
+   * @param {object} httpRequest
+   */
   async function updateById(httpRequest) {
     try {
       const id = httpRequest.params.id;
@@ -239,6 +277,7 @@ const UserController = ({ UserService }) => {
   return {
     Signup,
     // Login,
+    suspendById,
     getById,
     updateById,
     listUsers,

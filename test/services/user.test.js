@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const users = require("../mocks/user");
 
 describe("User uses cases or services", () => {
+  let adminUser = null;
+  let adminUserData = null;
   let authUser = null;
   let authUser1 = null;
   let authUserData = null;
@@ -32,6 +34,18 @@ describe("User uses cases or services", () => {
         .set("Authorization", `Bearer ${authUser1.accessToken}`)
         .send();
       authUserData1 = userDataResponse.body.user;
+
+      adminRes = await request(app)
+        .post("/admin/signup")
+        .send({ email: "admin@g.com", password: "aaaaaa" });
+      adminUserRes = adminRes.body.user;
+
+      adminDataResponse = await request(app)
+        .post("/auth")
+        .send({ email: "admin@g.com", password: "aaaaaa" });
+      adminUser = adminDataResponse.body.data;
+
+      console.log("admin ", adminUser);
     });
     done();
   });
@@ -188,6 +202,54 @@ describe("User uses cases or services", () => {
       //   console.log("users ", res.body);
       expect(res.body.user).toBeDefined();
       expect(res.body.user.username).toEqual(update.username);
+    });
+  });
+
+  // suspend user
+  describe("Edit or Update User's Profile (suspend)", () => {
+    let res = null;
+
+    beforeAll(async done => {
+      res = await request(app)
+        .put(`/users/${authUserData.id}/suspend?suspend=true`)
+        .set("Authorization", `Bearer ${adminUser.accessToken}`)
+        .send();
+      done();
+    });
+
+    it("successfully suspends user", async () => {
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual("success");
+    });
+
+    it("successfully Returns suspended user Updated Data", async () => {
+      //   console.log("users ", res.body);
+      expect(res.body.user).toBeDefined();
+      expect(res.body.message).toEqual("User successfully Suspended");
+    });
+  });
+
+  // unsuspend user
+  describe("Edit or Update User's Profile (unsuspend)", () => {
+    let res = null;
+
+    beforeAll(async done => {
+      res = await request(app)
+        .put(`/users/${authUserData.id}/suspend?suspend=false`)
+        .set("Authorization", `Bearer ${adminUser.accessToken}`)
+        .send();
+      done();
+    });
+
+    it("successfully suspends user", async () => {
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.status).toEqual("success");
+    });
+
+    it("successfully Returns suspended user Updated Data", async () => {
+      //   console.log("users ", res.body);
+      expect(res.body.user).toBeDefined();
+      expect(res.body.message).toEqual("User successfully Unsuspended");
     });
   });
 

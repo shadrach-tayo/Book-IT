@@ -8,7 +8,13 @@ const createAdminRoutes = ({
 }) => {
   const upload = multer();
 
-  return function(router) {};
+  return function(router) {
+    router.post(
+      "/admin/signup",
+      upload.none(),
+      makeCallback(adminController.Signup)
+    );
+  };
 };
 
 module.exports = createAdminRoutes;

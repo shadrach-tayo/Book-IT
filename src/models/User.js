@@ -10,7 +10,9 @@ const userSchema = mongoose.Schema({
   username: String,
   email: String,
   password: String,
-  role: String
+  role: String,
+  ip: String,
+  suspended: Boolean
 });
 
 userSchema.virtual("id").get(function() {

@@ -20,6 +20,15 @@ const createUserRoutes = ({
       ],
       makeCallback(userController.getById)
     );
+    router.put(
+      "/users/:id/suspend",
+      [
+        upload.none(),
+        authValidationMiddleware.validJWTNeeded,
+        permissionsMiddleware.grantAccess(["updateAny"], "profile")
+      ],
+      makeCallback(userController.suspendById)
+    );
     router.get(
       "/user",
       [

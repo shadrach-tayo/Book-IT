@@ -32,4 +32,8 @@ const AuthenticationService = createAuthenticationService({
   sanitizeUserData
 });
 
-module.exports = { UserService, AuthService: AuthenticationService };
+module.exports = {
+  UserService,
+  AuthService: AuthenticationService,
+  AdminService
+};

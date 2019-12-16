@@ -3,6 +3,7 @@ function sanitizeUserData(userObj) {
   delete obj.password;
   obj.id = obj._id;
   delete obj._id;
+  delete obj.suspended;
   delete obj.__v;
   return obj;
 }

@@ -8,7 +8,9 @@ module.exports = function buildMakeUser() {
     phone,
     username,
     email,
-    password
+    password,
+    ip,
+    suspended = false
   }) {
     // validate hotle data before creating and saving it to database
     if (!firstname) throw new Error("firstname cannot be empty");
@@ -45,7 +47,9 @@ module.exports = function buildMakeUser() {
       phone,
       username,
       email,
-      password
+      password,
+      ip,
+      suspended
     };
   };
 };
