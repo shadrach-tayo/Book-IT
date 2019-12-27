@@ -1,5 +1,5 @@
 const user = {
-  hotelname: "God's own hotel",
+  hotelName: "God's own hotel",
   street: "holiness road",
   city: "mowe",
   zip: "102345",

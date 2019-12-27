@@ -9,9 +9,9 @@ describe("Hotel", () => {
       expect(created).toBeDefined();
     });
 
-    it("has a valid hotelname", () => {
-      expect(created.hotelname).toBeDefined();
-      expect(typeof created.hotelname).toEqual("string");
+    it("has a valid hotelName", () => {
+      expect(created.hotelName).toBeDefined();
+      expect(typeof created.hotelName).toEqual("string");
     });
 
     it("has a valid phone", () => {

@@ -41,11 +41,9 @@ describe("User uses cases or services", () => {
       adminUserRes = adminRes.body.user;
 
       adminDataResponse = await request(app)
-        .post("/auth")
+        .post("/admin/auth")
         .send({ email: "admin@g.com", password: "aaaaaa" });
       adminUser = adminDataResponse.body.data;
-
-      console.log("admin ", adminUser);
     });
     done();
   });
@@ -289,7 +287,6 @@ describe("User uses cases or services", () => {
     });
 
     it("Rejects update request for another user's profile", async () => {
-      console.log("res ", res.body);
       expect(res.statusCode).toEqual(403);
       expect(res.body.status).toEqual("error");
     });

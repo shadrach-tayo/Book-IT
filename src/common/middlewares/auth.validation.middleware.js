@@ -18,7 +18,9 @@ function createAuthValidation({ config, jwt, crypto }) {
       }
     } else {
       // authorization header not set
-      return response.status(401).send({ status: "error" });
+      return response
+        .status(401)
+        .send({ status: "error", message: "Unauthorized Access" });
     }
   }
 

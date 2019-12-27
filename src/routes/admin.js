@@ -1,11 +1,4 @@
-const createAdminRoutes = ({
-  multer,
-  makeCallback,
-  adminController,
-  authValidationMiddleware,
-  permissionsMiddleware,
-  permissions
-}) => {
+const createAdminRoutes = ({ multer, makeCallback, adminController }) => {
   const upload = multer();
 
   return function(router) {

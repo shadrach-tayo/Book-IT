@@ -6,7 +6,8 @@ const AdminController = ({ AdminService }) => {
   async function Signup(httpRequest) {
     try {
       const userData = { ...httpRequest.body, role: "admin" };
-      const user = await AdminService.Signup(userData);
+      // console.log("new admin ", userData);
+      const admin = await AdminService.Signup(userData);
 
       return {
         headers: {
@@ -15,7 +16,7 @@ const AdminController = ({ AdminService }) => {
         body: {
           status: "success",
           message: "User successfully created",
-          user
+          admin
         }
       };
     } catch (error) {

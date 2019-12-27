@@ -4,18 +4,20 @@ const ac = new AccessControl();
 exports.roles = (function() {
   ac.grant("basic")
     .readOwn("profile")
-    .updateOwn("profile");
+    .updateOwn("profile")
+    .readAny("hotel");
 
-  ac.grant("supervisor")
+  ac.grant("agent")
     .extend("basic")
     .readAny("profile");
 
   ac.grant("admin")
     .extend("basic")
-    .extend("supervisor")
+    .extend("agent")
     .readAny("profiles")
     .updateAny("profile")
-    .deleteAny("profile");
+    .deleteAny("profile")
+    .updateAny("hotel");
 
   return ac;
 })();

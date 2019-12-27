@@ -14,6 +14,11 @@ const createAuthRoutes = ({
       makeCallback(authController.Login)
     );
     router.post(
+      "/admin/auth",
+      [upload.none(), verifyUserMiddleware.isPasswordAndAdminMatch],
+      makeCallback(authController.Login)
+    );
+    router.post(
       "/auth/refresh",
       [
         upload.none(),

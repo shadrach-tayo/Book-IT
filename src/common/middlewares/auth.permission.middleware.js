@@ -53,6 +53,17 @@ exports.isSameUserOrAdmin = (request, response, next) => {
     }
   }
 };
+
+exports.isAdmin = (request, response, next) => {
+  if (request.jwt.role === "admin") {
+    return next();
+  } else {
+    return response
+      .status(403)
+      .send({ status: "error", message: "Unauthorized access" });
+  }
+};
+
 /*
 exports.onlySameUserCanDoThisAction = (request, response, next) => {
   let userId = request.jwt.userId;

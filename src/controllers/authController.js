@@ -1,4 +1,4 @@
-const authController = ({ AuthService }) => {
+const authController = ({ AuthService, AdminService }) => {
   async function refreshToken(req, res) {
     try {
       const token = await AuthService.refreshToken(req.jwt);
