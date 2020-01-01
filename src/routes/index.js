@@ -3,7 +3,8 @@ const {
   userController,
   authController,
   adminController,
-  hotelController
+  hotelController,
+  roomController
 } = require("../controllers");
 const makeCallback = require("./callback");
 
@@ -18,6 +19,7 @@ const createUserRoutes = require("./users");
 const createAdminRoutes = require("./admin");
 const createAuthRoutes = require("./auth");
 const createHotelRoutes = require("./hotel");
+const createRoomRoutes = require("./room");
 
 const userRoute = createUserRoutes({
   multer,
@@ -31,6 +33,16 @@ const hotelRoute = createHotelRoutes({
   multer,
   makeCallback,
   hotelController,
+  authController,
+  authValidationMiddleware,
+  verifyUserMiddleware,
+  permissionsMiddleware
+});
+
+const roomRoute = createRoomRoutes({
+  multer,
+  makeCallback,
+  roomController,
   authController,
   authValidationMiddleware,
   verifyUserMiddleware,
@@ -59,6 +71,7 @@ module.exports = router => {
   authRoute(router);
   adminRoute(router);
   hotelRoute(router);
+  roomRoute(router);
 
   /* GET home page. */
 

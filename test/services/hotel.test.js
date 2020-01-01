@@ -3,7 +3,7 @@ const app = require("../../src/app");
 const { db } = require("../../src/app");
 const mongoose = require("mongoose");
 
-describe("Admin Services", () => {
+describe("Hotel Services", () => {
   const admin = { email: "admin3@gmail.com", password: "aaaaaa" };
   const mockHotel = {
     hotelName: "Genreal hotels",

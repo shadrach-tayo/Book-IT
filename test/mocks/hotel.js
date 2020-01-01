@@ -1,9 +1,8 @@
-const user = {
-  hotelName: "God's own hotel",
-  street: "holiness road",
-  city: "mowe",
-  zip: "102345",
-  phone: "09055334491"
+const hotel = {
+  hotelName: "Genreal hotels",
+  phone: 9098885849,
+  street: "new street",
+  city: "Lagos",
+  zip: "109854"
 };
-
-module.exports = user;
+module.exports = hotel;

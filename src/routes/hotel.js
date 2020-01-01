@@ -58,7 +58,7 @@ const createHotelRoutes = ({
       [
         upload.none(),
         authValidationMiddleware.validJWTNeeded,
-        permissionsMiddleware.grantAccess("readAny", "hotel"),
+        permissionsMiddleware.grantAccess("deleteAny", "hotel"),
         permissionsMiddleware.isAdmin
       ],
       makeCallback(hotelController.deleteHotel)

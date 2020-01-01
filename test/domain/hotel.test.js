@@ -16,7 +16,7 @@ describe("Hotel", () => {
 
     it("has a valid phone", () => {
       expect(created.phone).toBeDefined();
-      expect(typeof created.phone).toEqual("string");
+      expect(typeof created.phone).toEqual("number");
     });
 
     it("has a valid city", () => {

@@ -5,7 +5,8 @@ exports.roles = (function() {
   ac.grant("basic")
     .readOwn("profile")
     .updateOwn("profile")
-    .readAny("hotel");
+    .readAny("hotel")
+    .readAny("room");
 
   ac.grant("agent")
     .extend("basic")
@@ -17,7 +18,10 @@ exports.roles = (function() {
     .readAny("profiles")
     .updateAny("profile")
     .deleteAny("profile")
-    .updateAny("hotel");
+    .updateAny("hotel")
+    .deleteAny("hotel")
+    .updateAny("room")
+    .deleteAny("room");
 
   return ac;
 })();
