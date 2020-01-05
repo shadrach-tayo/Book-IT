@@ -15,6 +15,7 @@ function createRoomService({ RoomDb, HotelDb }) {
 
     if (exists) {
       throw new Error("Room already exists!!!");
+      // console.log("exists ", exists);
     }
 
     const savedRoom = await RoomDb.newRoom(room);

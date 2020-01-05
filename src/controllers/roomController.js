@@ -20,6 +20,11 @@ const RoomController = ({ RoomService }) => {
         }
       };
     } catch (error) {
+      // console.log("error ", error.name);
+
+      let message = error.message;
+      if (error.code === 11000) message = "Room already exists!!!";
+
       return {
         headers: {
           ...httpRequest.headers
@@ -27,7 +32,7 @@ const RoomController = ({ RoomService }) => {
         statusCode: 400,
         body: {
           status: "error",
-          message: error.message
+          message
         }
       };
     }

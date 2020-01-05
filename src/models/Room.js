@@ -2,17 +2,18 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 const RoomSchema = mongoose.Schema({
-  roomNumber: Number,
+  roomNumber: {
+    type: Number,
+    index: true
+    // unique: true
+  },
   phone: Number,
   roomName: {
     type: String,
     index: true
   },
   type: String,
-  roomLock: {
-    type: String,
-    index: true
-  },
+  roomLock: String,
   hotelId: Schema.ObjectId,
   price: Number,
   suspended: Boolean,
