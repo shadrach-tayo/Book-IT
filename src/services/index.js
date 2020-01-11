@@ -3,12 +3,19 @@ const createAdminService = require("./admin");
 const createAuthenticationService = require("./auth");
 const createHotelService = require("./hotel");
 const createRoomService = require("./room");
+const createReservationService = require("./reservation");
 const crypto = require("crypto");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
 const { sanitizeUserData } = require("../utils");
 
-const { userDb, adminDb, HotelDb, RoomDb } = require("../data-access");
+const {
+  userDb,
+  adminDb,
+  HotelDb,
+  RoomDb,
+  ReservationDb
+} = require("../data-access");
 
 const UserService = createUserService({
   userDb,
@@ -23,6 +30,12 @@ const HotelService = createHotelService({
 });
 
 const RoomService = createRoomService({
+  RoomDb,
+  HotelDb
+});
+
+const ReservationService = createReservationService({
+  ReservationDb,
   RoomDb,
   HotelDb
 });
@@ -46,8 +59,9 @@ const AuthenticationService = createAuthenticationService({
 
 module.exports = {
   UserService,
-  HotelService,
   RoomService,
-  AuthService: AuthenticationService,
-  AdminService
+  HotelService,
+  AdminService,
+  ReservationService,
+  AuthService: AuthenticationService
 };

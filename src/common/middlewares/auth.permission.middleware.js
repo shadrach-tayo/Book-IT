@@ -1,4 +1,5 @@
 const { roles } = require("../roles");
+const { ReservationDb } = require("../../data-access");
 
 function grantAccess(action, resource) {
   return async (req, res, next) => {
@@ -61,6 +62,29 @@ exports.isAdmin = (request, response, next) => {
     return response
       .status(403)
       .send({ status: "error", message: "Unauthorized access" });
+  }
+};
+
+exports.canDeleteReservation = async (request, response, next) => {
+  let userId = request.jwt.userId;
+
+  const reservation = await ReservationDb.findById(request.params.id);
+
+  if (!reservation)
+    return response
+      .status(404)
+      .send({ status: "error", message: "Reservation not found" });
+
+  if (reservation && reservation.userId == userId) {
+    return next();
+  } else {
+    if (request.jwt.role === "admin") {
+      return next();
+    } else {
+      return response
+        .status(403)
+        .send({ status: "error", message: "Unauthorized access" });
+    }
   }
 };
 

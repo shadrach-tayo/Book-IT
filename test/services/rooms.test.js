@@ -59,7 +59,7 @@ describe("Room Services", () => {
         .set("Authorization", `Bearer ${adminUser.accessToken}`)
         .send(mockHotel);
       hotelData = hotelRes.body.hotel;
-      console.log("hotel ", hotelRes.body);
+      // console.log("hotel ", hotelRes.body);
       room = {
         ...rooms[1],
         hotelId: hotelData.id
@@ -144,7 +144,7 @@ describe("Room Services", () => {
       done();
     });
 
-    it("successfully retrieves Hotel data", async () => {
+    it("successfully retrieves Rooms", async () => {
       expect(response.statusCode).toEqual(200);
       expect(response.body.rooms).toBeDefined();
       expect(response.body.rooms.length).toBeGreaterThan(0);

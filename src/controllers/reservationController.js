@@ -1,13 +1,14 @@
-const RoomController = ({ RoomService }) => {
+const ReservationController = ({ ReservationService }) => {
   /**
-   * Funtion to handle creating a new hotel
+   * Funtion to handle creating a new reservation
    * @param {object} httpRequest
    */
-  async function addNewRoom(httpRequest) {
+  async function addNewReservation(httpRequest) {
     try {
-      const roomData = httpRequest.body;
+      const data = httpRequest.body;
+      console.log("reserve ", data);
 
-      const room = await RoomService.addRoom(roomData);
+      const reservation = await ReservationService.addReservation(data);
 
       return {
         headers: {
@@ -15,15 +16,15 @@ const RoomController = ({ RoomService }) => {
         },
         body: {
           status: "success",
-          message: "Room successfully created",
-          room
+          message: "Reservation successfully created",
+          reservation
         }
       };
     } catch (error) {
       // console.log("error ", error.name);
 
       let message = error.message;
-      if (error.code === 11000) message = "Room already exists!!!";
+      if (error.code === 11000) message = "Reservation already exists!!!";
 
       return {
         headers: {
@@ -39,15 +40,15 @@ const RoomController = ({ RoomService }) => {
   }
 
   /**
-   * Funtion to handle editing a hotel data
+   * Funtion to handle editing a reservation data
    * @param {object} httpRequest
    */
-  async function editRoom(httpRequest) {
+  async function editReservation(httpRequest) {
     try {
       const id = httpRequest.params.id;
       const update = httpRequest.body;
 
-      const room = await RoomService.editRoom(id, update);
+      const reservation = await ReservationService.editReservation(id, update);
 
       return {
         headers: {
@@ -56,7 +57,7 @@ const RoomController = ({ RoomService }) => {
         body: {
           status: "success",
           //   message: "room successfully updated",
-          room
+          reservation
         }
       };
     } catch (error) {
@@ -73,14 +74,14 @@ const RoomController = ({ RoomService }) => {
     }
   }
   /**
-   * Funtion to handle editing a hotel data
+   * Funtion to handle editing a reservation data
    * @param {object} httpRequest
    */
-  async function getRoomById(httpRequest) {
+  async function getReservationById(httpRequest) {
     try {
       const id = httpRequest.params.id;
 
-      const room = await RoomService.getRoomById(id);
+      const reservation = await ReservationService.getReservationById(id);
 
       return {
         headers: {
@@ -88,7 +89,7 @@ const RoomController = ({ RoomService }) => {
         },
         body: {
           status: "success",
-          room
+          reservation
         }
       };
     } catch (error) {
@@ -105,12 +106,12 @@ const RoomController = ({ RoomService }) => {
     }
   }
   /**
-   * Funtion to handle editing a hotel data
+   * Funtion to handle editing a reservation data
    * @param {object} httpRequest
    */
-  async function getAllRooms(httpRequest) {
+  async function getAllReservations(httpRequest) {
     try {
-      const rooms = await RoomService.getAll();
+      const reservations = await ReservationService.getAll();
 
       return {
         headers: {
@@ -118,7 +119,7 @@ const RoomController = ({ RoomService }) => {
         },
         body: {
           status: "success",
-          rooms
+          reservations
         }
       };
     } catch (error) {
@@ -134,13 +135,17 @@ const RoomController = ({ RoomService }) => {
       };
     }
   }
+
   /**
-   * Funtion to handle editing a hotel data
+   * Funtion to handle editing a reservation data
    * @param {object} httpRequest
    */
-  async function getAllUnsuspended(httpRequest) {
+  async function getReservations(httpRequest) {
+    console.log(httpRequest.query);
     try {
-      const rooms = await RoomService.getAllUnsuspended();
+      const reservations = await ReservationService.getReservations(
+        httpRequest.query
+      );
 
       return {
         headers: {
@@ -148,7 +153,7 @@ const RoomController = ({ RoomService }) => {
         },
         body: {
           status: "success",
-          rooms
+          reservations
         }
       };
     } catch (error) {
@@ -169,14 +174,17 @@ const RoomController = ({ RoomService }) => {
    * Funtion to handle suspending and unsuspending room
    * @param {object} httpRequest
    */
-  async function suspendRoom(httpRequest) {
+  async function cancelReservation(httpRequest) {
     try {
       const id = httpRequest.params.id;
 
       const suspended = httpRequest.query.suspend === "true";
-      const room = { suspended };
+      const reservations = { suspended };
 
-      const updatedRoom = await RoomService.editRoom(id, room);
+      const updatedReservations = await ReservationService.editReservation(
+        id,
+        reservations
+      );
 
       return {
         headers: {
@@ -184,10 +192,8 @@ const RoomController = ({ RoomService }) => {
         },
         body: {
           status: "success",
-          message: `Room successfully ${
-            suspended ? "Suspended" : "Unsuspended"
-          }`,
-          room: updatedRoom
+          message: `Reservation successfully cancelled`,
+          reservations: updatedReservations
         }
       };
     } catch (error) {
@@ -204,14 +210,14 @@ const RoomController = ({ RoomService }) => {
     }
   }
   /**
-   * Funtion to handle deleting hotel
+   * Funtion to handle deleting reservation
    * @param {object} httpRequest
    */
-  async function deleteRoom(httpRequest) {
+  async function deleteReservation(httpRequest) {
     try {
       const id = httpRequest.params.id;
 
-      const room = await RoomService.deleteRoom(id);
+      const reservation = await ReservationService.deleteReservation(id);
 
       return {
         headers: {
@@ -219,8 +225,8 @@ const RoomController = ({ RoomService }) => {
         },
         body: {
           status: "success",
-          message: "Room successfully deleted",
-          room
+          message: "Reservation successfully deleted",
+          reservation
         }
       };
     } catch (error) {
@@ -238,14 +244,14 @@ const RoomController = ({ RoomService }) => {
   }
 
   return {
-    addNewRoom,
-    editRoom,
-    getAllRooms,
-    getRoomById,
-    suspendRoom,
-    deleteRoom,
-    getAllUnsuspended
+    addNewReservation,
+    editReservation,
+    getAllReservations,
+    getReservationById,
+    cancelReservation,
+    getReservations,
+    deleteReservation
   };
 };
 
-module.exports = RoomController;
+module.exports = ReservationController;
