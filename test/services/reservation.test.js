@@ -213,6 +213,7 @@ describe("Reservation Services", () => {
         .get(`/reservations?userId=${userData.id}`)
         .set("Authorization", `Bearer ${adminUser.accessToken}`)
         .send();
+
       done();
     });
 

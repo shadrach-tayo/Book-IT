@@ -45,7 +45,7 @@ function createRoomService({ RoomDb, HotelDb }) {
   }
 
   async function getAllUnsuspended() {
-    const rooms = await RoomDb.find({ suspended: false });
+    const rooms = await RoomDb.findAll({ suspended: false });
 
     return rooms;
   }

@@ -141,6 +141,7 @@ describe("Room Services", () => {
         .get(`/rooms`)
         .set("Authorization", `Bearer ${adminUser.accessToken}`)
         .send();
+      console.log("rooms ", response.body);
       done();
     });
 

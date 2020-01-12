@@ -66,19 +66,7 @@ const findById = async id => {
   return result;
 };
 
-const findAll = async _ => {
-  return RerservationModel.find({})
-    .then(results => {
-      const found = results;
-
-      return found;
-    })
-    .catch(err => {
-      console.log("err ", err);
-      return null;
-    });
-};
-const find = async query => {
+const findAll = async query => {
   return RerservationModel.find(query)
     .then(results => {
       const found = results;
@@ -91,15 +79,28 @@ const find = async query => {
     });
 };
 
-const findCommonReservation = async ({ hotelId, roomId }) => {
+const find = async query => {
+  return RerservationModel.find(query)
+    .then(results => {
+      const found = results;
+      // console.log("find ", results);
+      return found[0];
+    })
+    .catch(err => {
+      console.log("err ", err);
+      return null;
+    });
+};
+
+const findCommonReservation = async ({ hotelId, roomId, roomNumber }) => {
   const query = RerservationModel.find();
   query.and([{ hotelId }]);
-  query.or([{ roomId }]);
+  query.or([{ roomId }, { roomNumber }]);
 
   return query
     .exec()
     .then(results => {
-      // console.log("rooms ", results);
+      // console.log("reservations ", results);
       return results[0];
     })
     .catch(err => {

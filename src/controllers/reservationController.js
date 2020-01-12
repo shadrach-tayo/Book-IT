@@ -6,7 +6,6 @@ const ReservationController = ({ ReservationService }) => {
   async function addNewReservation(httpRequest) {
     try {
       const data = httpRequest.body;
-      console.log("reserve ", data);
 
       const reservation = await ReservationService.addReservation(data);
 
@@ -141,7 +140,6 @@ const ReservationController = ({ ReservationService }) => {
    * @param {object} httpRequest
    */
   async function getReservations(httpRequest) {
-    console.log(httpRequest.query);
     try {
       const reservations = await ReservationService.getReservations(
         httpRequest.query

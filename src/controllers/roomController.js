@@ -111,7 +111,7 @@ const RoomController = ({ RoomService }) => {
   async function getAllRooms(httpRequest) {
     try {
       const rooms = await RoomService.getAll();
-
+      console.log("service all ", rooms);
       return {
         headers: {
           ...httpRequest.headers

@@ -72,24 +72,22 @@ const findById = async id => {
   return result;
 };
 
-const findAll = async _ => {
-  return RoomModel.find({})
+const findAll = async query => {
+  return RoomModel.find(query)
     .then(results => {
-      const found = results;
-
-      return found;
+      console.log("room all ", results);
+      return results;
     })
     .catch(err => {
       console.log("err ", err);
       return null;
     });
 };
+
 const find = async query => {
   return RoomModel.find(query)
     .then(results => {
-      const found = results;
-
-      return found;
+      return results[0];
     })
     .catch(err => {
       console.log("err ", err);
