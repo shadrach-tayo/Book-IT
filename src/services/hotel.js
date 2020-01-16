@@ -30,8 +30,8 @@ function createHotelService({ HotelDb }) {
     return hotel;
   }
 
-  async function getAll() {
-    const hotels = await HotelDb.findAll();
+  async function getAll(query) {
+    const hotels = await HotelDb.findAll(query);
 
     return hotels;
   }

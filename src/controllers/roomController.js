@@ -140,7 +140,7 @@ const RoomController = ({ RoomService }) => {
    */
   async function getAllUnsuspended(httpRequest) {
     try {
-      const rooms = await RoomService.getAllUnsuspended();
+      const rooms = await RoomService.getAllUnsuspended(httpRequest.query);
 
       return {
         headers: {

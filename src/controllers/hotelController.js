@@ -105,7 +105,7 @@ const HotelController = ({ HotelService }) => {
    */
   async function getAllHotels(httpRequest) {
     try {
-      const hotels = await HotelService.getAll();
+      const hotels = await HotelService.getAll(httpRequest.query);
 
       return {
         headers: {

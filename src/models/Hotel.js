@@ -59,8 +59,8 @@ const findById = async id => {
   return result;
 };
 
-const findAll = async id => {
-  return HotelModel.find({})
+const findAll = async query => {
+  return HotelModel.find(query)
     .then(results => {
       const found = results;
 
